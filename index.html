@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Machine – Hors service depuis 1976</title>
+<style>
+  :root{
+    --rouille:#7a3b1d; --fer:#3a3a3c; --fer-clair:#6b6b6e; --mousse:#2f4a2a;
+    --nuit:#0e0d0b; --alerte:#ff1a1a; --papier:#c9b98f;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%;background:var(--nuit);overflow:hidden;
+    font-family:"Courier New",Courier,monospace;color:var(--papier)}
+
+  /* ---------- Fond abandonné ---------- */
+  .fond{position:fixed;inset:0;z-index:0;transition:opacity 1.5s,filter 1.5s;
+    background:
+      radial-gradient(ellipse at 50% 45%,rgba(120,90,50,.28),transparent 60%),
+      repeating-linear-gradient(90deg,rgba(0,0,0,.35) 0 2px,transparent 2px 90px),
+      repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px),
+      linear-gradient(#1b1812,#0b0a08 70%,#14110c);}
+  .fond::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.85) 100%);}
+  .sol{position:absolute;left:0;right:0;bottom:0;height:22%;
+    background:linear-gradient(transparent,rgba(0,0,0,.7)),
+      repeating-linear-gradient(90deg,#241d15 0 120px,#1a150f 120px 124px);}
+  .lierre{position:absolute;top:0;width:min(34vw,360px);height:78%;opacity:.9}
+  .lierre.g{left:0}.lierre.d{right:0;transform:scaleX(-1)}
+  .poussiere{position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 30%,rgba(255,240,200,.07) 0 2px,transparent 3px),
+      radial-gradient(circle at 70% 60%,rgba(255,240,200,.06) 0 2px,transparent 3px),
+      radial-gradient(circle at 85% 25%,rgba(255,240,200,.05) 0 1px,transparent 2px);
+    background-size:240px 240px,320px 320px,180px 180px;
+    animation:derive 40s linear infinite}
+  @keyframes derive{to{background-position:240px 480px,-320px 640px,180px 360px}}
+
+  /* ---------- Mise en page ---------- */
+  main{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:2.2rem;padding:1.5rem;text-align:center}
+  .plaque{border:3px solid var(--fer-clair);padding:.7rem 1.4rem;
+    background:linear-gradient(#2a2622,#1a1714);letter-spacing:.18em;font-size:clamp(.8rem,2.4vw,1rem);
+    box-shadow:inset 0 0 0 3px #111,0 6px 20px #000;color:#b8a77c}
+  .plaque small{display:block;margin-top:.3rem;letter-spacing:.1em;opacity:.7;font-size:.78em}
+
+  /* ---------- Bouton en fer ---------- */
+  .socle{width:min(62vw,300px);aspect-ratio:1;border-radius:50%;position:relative;
+    background:radial-gradient(circle at 35% 30%,#7d7d80,#38383a 55%,#18181a);
+    box-shadow:0 18px 40px #000,inset 0 2px 3px rgba(255,255,255,.25),inset 0 -6px 12px #000;
+    display:grid;place-items:center}
+  .socle::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:
+      radial-gradient(circle at 8% 50%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 92% 50%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 50% 8%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 50% 92%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 21% 21%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 79% 21%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 21% 79%,#222 0 5px,transparent 6px),
+      radial-gradient(circle at 79% 79%,#222 0 5px,transparent 6px);}
+  .socle::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:
+      radial-gradient(circle at 70% 75%,rgba(122,59,29,.55),transparent 28%),
+      radial-gradient(circle at 25% 80%,rgba(122,59,29,.35),transparent 22%);mix-blend-mode:multiply}
+  #bouton{width:68%;aspect-ratio:1;border-radius:50%;border:0;cursor:pointer;position:relative;
+    background:radial-gradient(circle at 38% 30%,#a0a0a3,#5a5a5d 45%,#2b2b2d);
+    box-shadow:0 10px 0 #151516,0 16px 24px rgba(0,0,0,.8),inset 0 3px 4px rgba(255,255,255,.35);
+    color:#d8cfb5;font:700 clamp(1rem,4vw,1.35rem)/1.2 "Courier New",monospace;letter-spacing:.2em;
+    text-shadow:0 -1px 0 #000,0 1px 0 rgba(255,255,255,.25);
+    transition:transform .08s,box-shadow .08s}
+  #bouton:hover{filter:brightness(1.08)}
+  #bouton:active,#bouton.enfonce{transform:translateY(8px);
+    box-shadow:0 2px 0 #151516,0 5px 10px rgba(0,0,0,.8),inset 0 3px 8px rgba(0,0,0,.6)}
+  #bouton:focus-visible{outline:3px dashed var(--papier);outline-offset:8px}
+  #bouton:disabled{cursor:default}
+  .voyant{width:14px;height:14px;border-radius:50%;background:#3a1210;box-shadow:inset 0 0 4px #000;
+    margin:0 auto .5rem;display:block}
+
+  /* ---------- Compte à rebours ---------- */
+  #decompte{position:fixed;inset:0;z-index:5;display:none;flex-direction:column;align-items:center;
+    justify-content:center;background:rgba(5,4,3,.82);text-align:center}
+  #decompte p{letter-spacing:.3em;font-size:clamp(.9rem,3vw,1.3rem);color:#b8a77c}
+  #decompte b{font-size:clamp(6rem,30vw,16rem);line-height:1;color:var(--papier);
+    text-shadow:0 0 30px rgba(255,200,120,.45)}
+
+  /* ---------- Surchauffe ---------- */
+  #flash{position:fixed;inset:0;z-index:4;background:var(--alerte);opacity:0;pointer-events:none}
+  body.surchauffe #flash{animation:flashrouge .7s steps(1) infinite}
+  @keyframes flashrouge{0%{opacity:.55}50%{opacity:0}}
+  #alerte{position:fixed;inset:0;z-index:6;display:none;align-items:center;justify-content:center;
+    pointer-events:none}
+  #alerte span{font:900 clamp(2.4rem,11vw,8rem)/1 "Courier New",monospace;color:var(--alerte);
+    letter-spacing:.08em;text-shadow:0 0 24px var(--alerte),0 0 3px #000;
+    background:rgba(0,0,0,.65);padding:.2em .4em;border:.06em solid var(--alerte);
+    animation:clignote .5s steps(1) infinite}
+  @keyframes clignote{50%{opacity:0}}
+  body.surchauffe #alerte{display:flex}
+  body.surchauffe main{animation:tremble .12s linear infinite}
+  @keyframes tremble{25%{transform:translate(2px,-1px)}75%{transform:translate(-2px,1px)}}
+
+  /* ---------- État final : machine rouge à l'infini ---------- */
+  #machine{position:fixed;inset:0;z-index:3;display:none;flex-direction:column;align-items:center;
+    justify-content:center;gap:1.2rem;text-align:center;padding:1.5rem;
+    background:radial-gradient(ellipse at center,rgba(255,26,26,.14),rgba(40,0,0,.55) 75%)}
+  #machine h2{font:700 clamp(1.4rem,6vw,3rem) "Courier New",monospace;color:var(--alerte);
+    letter-spacing:.15em;text-shadow:0 0 14px rgba(255,26,26,.8);animation:pulse 2.2s ease-in-out infinite}
+  #machine pre{color:#ff5a4a;font-size:clamp(.7rem,2.6vw,1rem);text-align:left;line-height:1.7;
+    text-shadow:0 0 6px rgba(255,26,26,.6)}
+  #machine .barre{width:min(70vw,420px);height:16px;border:2px solid var(--alerte);padding:2px}
+  #machine .barre i{display:block;height:100%;background:var(--alerte);
+    animation:oscille 3.4s ease-in-out infinite alternate;box-shadow:0 0 10px var(--alerte)}
+  @keyframes oscille{from{width:55%}to{width:97%}}
+  @keyframes pulse{50%{opacity:.45}}
+  .scan{position:fixed;inset:0;z-index:7;pointer-events:none;display:none;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+  body.final .scan{display:block}
+  body.final #machine{display:flex}
+  body.final main{opacity:0;pointer-events:none}
+  body.final .fond{filter:sepia(1) saturate(4) hue-rotate(-40deg) brightness(.85)}
+  body.surchauffe .fond{opacity:0}
+  body.final .fond{opacity:1}
+  body.final{animation:vacille 5s infinite}
+  @keyframes vacille{0%,92%,100%{filter:none}94%{filter:brightness(.6)}96%{filter:brightness(1.3)}}
+
+  @media (prefers-reduced-motion:reduce){
+    .poussiere,body.final,body.surchauffe main{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="fond" aria-hidden="true">
+  <div class="sol"></div>
+  <svg class="lierre g" viewBox="0 0 200 400" preserveAspectRatio="none">
+    <g fill="none" stroke="#2f4a2a" stroke-width="5" stroke-linecap="round">
+      <path d="M10 0 C40 80 0 140 50 220 S30 330 70 400"/>
+      <path d="M45 0 C70 60 30 120 80 180 S60 260 100 320"/>
+      <path d="M0 60 C30 90 20 150 40 190"/>
+    </g>
+    <g fill="#3d6234">
+      <ellipse cx="38" cy="90" rx="14" ry="7" transform="rotate(-30 38 90)"/>
+      <ellipse cx="20" cy="150" rx="15" ry="7" transform="rotate(25 20 150)"/>
+      <ellipse cx="55" cy="215" rx="16" ry="7" transform="rotate(-20 55 215)"/>
+      <ellipse cx="45" cy="290" rx="15" ry="7" transform="rotate(30 45 290)"/>
+      <ellipse cx="78" cy="170" rx="13" ry="6" transform="rotate(-35 78 170)"/>
+      <ellipse cx="88" cy="270" rx="14" ry="6" transform="rotate(20 88 270)"/>
+      <ellipse cx="65" cy="350" rx="14" ry="6" transform="rotate(-25 65 350)"/>
+    </g>
+  </svg>
+  <svg class="lierre d" viewBox="0 0 200 400" preserveAspectRatio="none">
+    <g fill="none" stroke="#2f4a2a" stroke-width="5" stroke-linecap="round">
+      <path d="M10 0 C50 70 10 150 60 230 S40 320 60 400"/>
+      <path d="M50 0 C60 50 20 100 70 150"/>
+    </g>
+    <g fill="#3d6234">
+      <ellipse cx="35" cy="80" rx="14" ry="7" transform="rotate(-30 35 80)"/>
+      <ellipse cx="30" cy="160" rx="15" ry="7" transform="rotate(25 30 160)"/>
+      <ellipse cx="60" cy="230" rx="16" ry="7" transform="rotate(-20 60 230)"/>
+      <ellipse cx="50" cy="310" rx="15" ry="7" transform="rotate(30 50 310)"/>
+      <ellipse cx="68" cy="140" rx="13" ry="6" transform="rotate(-35 68 140)"/>
+    </g>
+  </svg>
+  <div class="poussiere"></div>
+</div>
+
+<main>
+  <div class="plaque">
+    MACHINE N° 7
+    <small>Hors service depuis 1976 &middot; Ne pas toucher</small>
+  </div>
+
+  <div class="socle">
+    <button id="bouton" type="button">
+      <span class="voyant" id="voyant"></span>
+      LANCER
+    </button>
+  </div>
+</main>
+
+<div id="decompte" role="status" aria-live="assertive">
+  <p>DÉMARRAGE DANS</p>
+  <b id="chiffre">5</b>
+</div>
+
+<div id="flash"></div>
+<div id="alerte" role="alert"><span>SURCHAUFFE</span></div>
+
+<section id="machine" aria-live="polite">
+  <h2>MACHINE EN MARCHE</h2>
+  <pre>
+&gt; NOYAU ............ ACTIF
+&gt; TEMPÉRATURE ...... INSTABLE
+&gt; ARRÊT D'URGENCE .. HORS SERVICE
+&gt; DERNIÈRE UTILISATION : 1976</pre>
+  <div class="barre"><i></i></div>
+</section>
+<div class="scan"></div>
+
+<audio id="son" src="Time_Machine_Sound_Effect.mp3" preload="auto"></audio>
+
+<script>
+  // --- Réglages (en secondes, comptées à partir du début de la musique) ---
+  const DECOMPTE   = 5;
+  const DEBUT_SURCHAUFFE = 15;
+  const FIN_SURCHAUFFE   = 35;
+
+  const body = document.body, son = document.getElementById("son");
+  const bouton = document.getElementById("bouton"), decompte = document.getElementById("decompte");
+  const chiffre = document.getElementById("chiffre");
+
+  bouton.addEventListener("click", () => {
+    bouton.disabled = true;
+    bouton.classList.add("enfonce");
+
+    // Le clic « débloque » l'audio : on le lance puis on le met en pause,
+    // pour pouvoir le démarrer automatiquement à la fin du compte à rebours.
+    son.play().then(() => { son.pause(); son.currentTime = 0; }).catch(() => {});
+
+    let n = DECOMPTE;
+    chiffre.textContent = n;
+    decompte.style.display = "flex";
+
+    const tick = setInterval(() => {
+      n--;
+      if (n > 0) { chiffre.textContent = n; return; }
+      clearInterval(tick);
+      decompte.style.display = "none";
+      lancerMusique();
+    }, 1000);
+  });
+
+  function lancerMusique(){
+    son.currentTime = 0;
+    son.play().catch(() => {});
+    document.getElementById("voyant").style.cssText =
+      "background:#ff3b2a;box-shadow:0 0 10px #ff3b2a";
+
+    setTimeout(() => body.classList.add("surchauffe"), DEBUT_SURCHAUFFE * 1000);
+    setTimeout(() => {
+      body.classList.remove("surchauffe");
+      body.classList.add("final");
+    }, FIN_SURCHAUFFE * 1000);
+  }
+</script>
+</body>
+</html>
